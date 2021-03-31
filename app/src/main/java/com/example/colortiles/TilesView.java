@@ -3,8 +3,6 @@ package com.example.colortiles;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -18,26 +16,25 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 
 public class TilesView extends View {
 
-    final int PAUSE_LENGTH = 1;
-    int displayWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-    int openedCards = 0;
+    final int displayWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+    // --Commented out by Inspection (31.03.2021 23:16):int openedCards = 0;
 
-    float tmpWidth = displayWidth / 5;
-    float tmpHeight = displayWidth / 5;
+    float tmpWidth = displayWidth / (float) 5;
+    float tmpHeight = displayWidth / (float) 5;
     float tmpX = tmpWidth / 3;
     float tmpY = tmpWidth / 3;
+//    сделала каст переменных к нужному типу
 
-    ArrayList<Card> cards = new ArrayList<>();
+    final ArrayList<Card> cards = new ArrayList<>();
     List<Integer> colors;
 
-    boolean isOnPauseNow = false;
+    final boolean isOnPauseNow = false;
 
     Card firstCard = null;
     int counter = 0;
@@ -68,11 +65,17 @@ public class TilesView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean performClick() {
+        Log.d("testLog", "touched!");
+        return super.performClick();
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
-        //      Log.d("myTag", "onTouchEvent: " + cards.get(3).color);
+
         if (event.getAction() == MotionEvent.ACTION_DOWN && !isOnPauseNow) {
             for (Card c : cards) {
                 if (c.changeColor(x, y)) {
@@ -93,13 +96,14 @@ public class TilesView extends View {
                     invalidate();
                     PauseTask task = new PauseTask();
                     task.execute();
+
+                    performClick();
+
                     return true;
 
 
                 }
             }
-
-
         }
 
 
@@ -161,8 +165,8 @@ public class TilesView extends View {
             }
 
         }
-        tmpWidth = displayWidth / 5;
-        tmpHeight = displayWidth / 5;
+        tmpWidth = displayWidth / (float)5;
+        tmpHeight = displayWidth / (float)5;
         tmpX = tmpWidth / 3;
         tmpY = tmpWidth / 3;
     }
